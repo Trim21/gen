@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -256,7 +255,6 @@ func (g *Generator) Execute() {
 func (g *Generator) successInfo(logInfos ...string) {
 	for _, l := range logInfos {
 		g.db.Logger.Info(context.Background(), l)
-		log.Println(l)
 	}
 }
 
