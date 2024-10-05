@@ -3,6 +3,7 @@ package generate
 import (
 	"context"
 	"errors"
+	"sort"
 
 	"gorm.io/gorm"
 
@@ -48,6 +49,11 @@ func getTableColumns(db *gorm.DB, schemaName string, tableName string, indexTag 
 	if err != nil {
 		return nil, err
 	}
+
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].Name() < result[j].Name()
+	})
+
 	if !indexTag || len(result) == 0 {
 		return result, nil
 	}
@@ -64,7 +70,12 @@ func getTableColumns(db *gorm.DB, schemaName string, tableName string, indexTag 
 	im := model.GroupByColumn(index)
 	for _, c := range result {
 		c.Indexes = im[c.Name()]
+
+		sort.Slice(c.Indexes, func(i, j int) bool {
+			return c.Indexes[i].Name() < c.Indexes[j].Name()
+		})
 	}
+
 	return result, nil
 }
 
